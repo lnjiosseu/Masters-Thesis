@@ -27,7 +27,7 @@ data$age[data$age == "-97990"] <- "N/A"
 data$age <- as.numeric(data$age)
 data$age[data$age == "-97989"] <- "N/A"
 
-
+#Recoding a continuous variable into categorical variable
 data$province <- as.character(data$province)
 data$province[data$province == 1] <-"Lusaka"
 data$province[data$province == 2] <-"Northen"
@@ -43,8 +43,6 @@ data$hivstat <- as.character(data$hivstat)
 data$hivstat[data$hivstat == 1] <-"positive"
 data$hivstat[data$hivstat == 2] <-"negative"
 data$hivstat[data$hivstat == 3] <-"unknown"
-
-#Should I add f969?
 
 
 data$agegrp <- as.character(data$agegrp)
@@ -117,35 +115,32 @@ data$pregdesire[data$pregdesire == 1] <-"Likely"
 data$pregdesire[data$pregdesire == 2] <-"Not likely"
 data$pregdesire[data$pregdesire == 3] <-"Not likely"
 data$pregdesire[data$pregdesire == 8] <-"N/A"
-#unwanted or not? read again!
 
 data$chldth <- as.character(data$chldth)
 data$chldth[data$chldth == 1] <-"Yes"
 data$chldth[data$chldth == 2] <-"No"
 data$chldth[data$chldth == 88] <-"N/A"
 
-library(naniar)
-#data<-data %>% replace_with_na_all(condition = ~.x == 88)
+#Replacing empty values in the dataset by NA
 data[data==""]<-NA
 
-na_strings <- c("N/A")
-data <- data %>% replace_with_na_all(condition = ~.x %in% na_strings)
-
-#data$id<-c(1:1441)
-#Reorder that column to the front
-#data<-data%>%select(3:5,14,6,1:2,everything())
-
-#Save data
+#Saving data
 write.table(data, file = "data.csv",
             sep = "\t", row.names = F)
-#Drop the missing values
+
+#Checking for missing values
+sum(is.na(data))
+
+#Dropping the missing values
 newdata <- na.omit(data)
 
-#as.data.frame(table(data$pregdesire))
-#colSums(is.na(data))
-#data[!complete.cases(data),]
-#newdata<-data[!is.na(data$dob), ]
+#Saving new data
+write.table(newdata, file = "newdata.csv",
+            sep = "\t", row.names = F)
+
                                                       ################## ANALYSIS #######################
+#Descriptive statistics for some variables
+summary(newdata$chldth)
 
 #Univariate analysis
 library(pander)
@@ -192,9 +187,10 @@ glm.probs
 glm.pred <- ifelse(glm.probs > 0.5, "Likely", "Not likely")
 glm.pred
 
-attach(newdata)
 table(glm.pred,pregdesire)
                                                     ########################################
+#Model Selection
+attach(newdata)
 
 model.null=glm(pregdesire ~ 1, data = newdata, family = "binomial")
 step(model.null,
