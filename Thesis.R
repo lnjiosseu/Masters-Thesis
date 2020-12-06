@@ -1,6 +1,12 @@
+#Clearing the environment 
+rm(list = ls())
+
 library(dplyr)
 library(tidyr)
 library(haven)
+
+#Read data
+library(readr)
 MyData <- read_dta("MyData.dta")
 
 #Select and rename columns of interest 
@@ -17,7 +23,7 @@ data$intrvyr<-NULL
 data$dob<-NULL
 data<-data%>%select(16,everything())
 
-
+#Recoding some numeric values as missing
 data$agefsx <- as.numeric(data$agefsx)
 data$agefsx[data$agefsx == "88"] <- "N/A"
 data$aglstbir <- as.numeric(data$aglstbir)
