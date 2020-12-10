@@ -212,35 +212,7 @@ library(My.stepwise)
 My.stepwise.glm(Y = "pregdesire", variable.list = c("hivstat", "agegrp", "education", "language", "urbrural", "province", "relg.imp", "chldth"), 
                 in.variable = "NULL", data = newdata, sle = 0.20, sls = 0.10, myfamily = "binomial")
 
-#Example from internet http://people.tamu.edu/~alawing/materials/ESSM689/GLMtutorial.pdf
-#high is the reference cell for education because high comes alphabetically before low! Finally, R picked no as the base for wantsMore.
-#If you are unhappy about these choices you can (1) use relevel() to change the base category, or (2) define your own indicator variables. I will use the second approach, defining indicators for women with high education and women who want no more children, both added to the cuse data frame:
-#cuse$noMore = cuse$wantsMore == "no"
-#cuse$hiEduc = cuse$education == "high"
-#Now try the model with these predictors
-#glm(cbind(using, notUsing) ~ age + hiEduc + noMore, +   data = cuse, family = binomial)
 
-#https://rcompanion.org/rcompanion/e_07.html (at the bottom for model comparison)
-
-
-#library(nnet)
-#test <- multinom(pregdesire ~ hivstat, data = newdata)
-#summary(test)
-
-#data$hivstat.p <- predict(fit, newdata = data, type = "response")
-#data
-#https://stats.idre.ucla.edu/r/dae/logit-regression/
-
-
-#Number of NAs in a column
-sum(is.na(data$pregdesire))
-#Location of an NA in a column
-which(is.na(newdata$pregdesire))
-
-table(newdata$pregdesire)
-
-summary(as.numeric(newdata$age))
-summary(newdata$age)
 
   
 
